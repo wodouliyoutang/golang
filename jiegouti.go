@@ -1,7 +1,8 @@
 package main
 
-import "fmt"
-
+import _"fmt"
+// 结构体
+// type后跟结构名称  struct 后跟声明的类型
 type Books struct {
    title string
    author string
@@ -9,32 +10,36 @@ type Books struct {
    book_id int
 }
 
+type Lanague struct {
+	num int 
+	name string
+	time int
+}
+
 func main(){
-   var Book1 Books        /* 声明 Book1 为 Books 类型 */
-   var Book2 Books        /* 声明 Book2 为 Books 类型 */
+   /*	
+   var peo1 Books              
+   peo1.title = "Go 语言"
+   peo1.author = "www.w3cschool.cn"
+   peo1.subject = "Go 语言教程"
+   peo1.book_id = 6495407
 
-   /* book 1 描述 */
-   Book1.title = "Go 语言"
-   Book1.author = "www.w3cschool.cn"
-   Book1.subject = "Go 语言教程"
-   Book1.book_id = 6495407
+   fmt.Println(peo1.title)
+   fmt.Println(peo1.author)
+   fmt.Println(peo1.subject)
+   fmt.Println(peo1.book_id)
 
-   /* book 2 描述 */
-   Book2.title = "Python 教程"
-   Book2.author = "www.w3cschool.cn"
-   Book2.subject = "Python 语言教程"
-   Book2.book_id = 6495700
+   fmt.Println("-----")
 
-   /* 打印 Book1 信息 */
-   fmt.Println(Book1.title)
-   fmt.Println(Book1.author)
-   fmt.Println(Book1.subject)
-   fmt.Println(Book1.book_id)
+   var lenmu Lanague
+   lenmu.num = 13
+   lenmu.name = "qaqa"
+   lenmu.time = 2018
+   fmt.Println(lenmu.num)
+   fmt.Println(lenmu.name)
+   fmt.Println(lenmu.time)
+   */
+   
 
-   /* 打印 Book2 信息 */
-   fmt.Println(Book2.title)
-   fmt.Println(Book2.author)
-   fmt.Println(Book2.subject)
-   fmt.Println(Book2.book_id)
 
 }
