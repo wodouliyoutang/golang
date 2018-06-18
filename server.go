@@ -1,18 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
-	"log"
-	)
-
+)
 
 func main() {
-	s := &http.Server{
-	Addr:           ":8099",
-	//Handler:        myHandler,
-	ReadTimeout:    10 ,
-	WriteTimeout:   10 ,
-	MaxHeaderBytes: 1 << 20,
+	http.HandleFunc("/", handler)
+	http.HandleFunc("/login", login)
+	http.ListenAndServe("localhost:8080", nil)
 }
-	log.Fatal(s.ListenAndServe())
+
+func handler(rw http.ResponseWriter, req *http.Request) {
+	fmt.Fprint(rw, "hello worlds")
+}
+func login(rw http.ResponseWriter, req *http.Request) {
+	fmt.Fprint(rw, "login")
 }

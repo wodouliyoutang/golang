@@ -1,34 +1,28 @@
-package main
+package main 
 
 import "fmt"
 
-
-type Phone interface {
-    call()
+type PEOPLE interface{
+	name() string
+	connect()
 }
 
-type NokiaPhone struct {
+type men struct{
+	age int
+	sex string
 }
 
-type IPhone struct {
+func main() {
+	var c PEOPLE
+	c = men{18,"男"}
+	c.connect()
 }
 
-func main(){
-	var phone Phone
-
-    phone = new(NokiaPhone)
-    phone.call()
-
-    phone = new(IPhone)
-    phone.call()
-
+func (a men) name() string {
+	a.sex = "男"
+	return a.sex
 }
 
-func (nokiaPhone NokiaPhone) call() {
-    fmt.Println("I am Nokia, I can call you!")
-}
-
-
-func (iPhone IPhone) call() {
-    fmt.Println("I am iPhone, I can call you!")
+func (b men) connect(){
+	fmt.Println(b)
 }

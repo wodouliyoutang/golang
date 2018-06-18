@@ -77,8 +77,13 @@ func main(){
         fmt.Println(i, c)
     }
  
+    //声明map
+    var m map[int]string = make(map[int]string)   //法一
+    m := make(map[int]string)         //法二
+    fmt.Println(m)
+
   
-    // 创建集合       
+    // 创建集合 map       
    var countryCapitalMap = make(map[string]string)
 
    countryCapitalMap["France"] = "Paris"
@@ -119,8 +124,17 @@ func main(){
   var son int = 3
   mean := float64(sum) /float64(son)
   fmt.Println(mean)
-   */
+  
 
+  a := struct { //声明结构体,并初始化
+      name string
+      age int
+  }{
+      name:"dabao",
+      age:13,
+  }
+  fmt.Println(a)
+     */
 }
 
 /*

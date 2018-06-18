@@ -1,7 +1,7 @@
 package main
 
  import "fmt"	
-import _"reflect"
+import "reflect"
 import _"math"
 // import "unsafe"
  //引入的包必须要使用 ,不使用用 _声明
@@ -202,7 +202,9 @@ func main() {
    adrswp(&a,&b)	//向函数传递指针达到交换值目的
    fmt.Println(a,b)
    */
-
+   num1 := 12
+   num2 := reflect.TypeOf(num1).NumField()
+   fmt.Println(num2)
 
 }
 /*
