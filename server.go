@@ -17,6 +17,9 @@ func main() {
 
 	http.HandleFunc("/login", user.Login)
 
+	http.HandleFunc("/index", user.Index)
+	http.HandleFunc("/dologin", user.Dologin)
+
 	err := http.ListenAndServe(":80", nil)
 	if err != nil {
 		fmt.Println(err.Error())
