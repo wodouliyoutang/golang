@@ -3,9 +3,9 @@ package user
 import (
 	"fmt"
 	"html/template"
-	"io"
+	_ "io"
 	"net/http"
-	"os"
+	_ "os"
 	_ "reflect"
 	"strings"
 )
@@ -58,6 +58,7 @@ func Index(response http.ResponseWriter, request *http.Request) {
 	tplhtml.Execute(response, data)
 }
 
+/*
 func Dologin(response http.ResponseWriter, request *http.Request) {
 	//   io.Writestring
 	//   log.Fatal
@@ -65,6 +66,7 @@ func Dologin(response http.ResponseWriter, request *http.Request) {
 	//   request.URL.string()
 	//   声明方法如何调用?接受体声明了,且都符合,正常调用了
 	//   src 下多项目多文件使用
+	//   refer 异常处理
 	fmt.Println(request.PostFormValue("test"))
 }
 
@@ -89,3 +91,4 @@ func upload(response http.ResponseWriter, request *http.Request) {
 		message := "upload-success"
 	}
 }
+*/
