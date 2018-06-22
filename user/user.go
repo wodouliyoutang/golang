@@ -3,9 +3,11 @@ package user
 import (
 	"fmt"
 	"html/template"
-	_ "io"
+	"io"
+	"io/ioutil"
+	_ "log"
 	"net/http"
-	_ "os"
+	"os"
 	_ "reflect"
 	"strings"
 )
@@ -16,6 +18,11 @@ type Data struct {
 
 /**
 * 渲染模板,传递的数据的值命名要大写,要以结构体传递
+ */
+/**
+ * 登录操作
+ * @param {[type]} response http.ResponseWriter [description]
+ * @param {[type]} request  *http.Request       [description]
  */
 func Login(response http.ResponseWriter, request *http.Request) {
 	var data Data
@@ -47,6 +54,12 @@ func Login(response http.ResponseWriter, request *http.Request) {
 	tplhtml.Execute(response, data)
 }
 
+/**
+ * 视图层数据推送
+ * 传递的数据的值命名要大写
+ * @param {[type]} response http.ResponseWriter [description]
+ * @param {[type]} request  *http.Request       [description]
+ */
 func Index(response http.ResponseWriter, request *http.Request) {
 	data := struct {
 		Info string
@@ -58,37 +71,61 @@ func Index(response http.ResponseWriter, request *http.Request) {
 	tplhtml.Execute(response, data)
 }
 
-/*
-func Dologin(response http.ResponseWriter, request *http.Request) {
-	//   io.Writestring
-	//   log.Fatal
-	//   字符串 + 号
-	//   request.URL.string()
-	//   声明方法如何调用?接受体声明了,且都符合,正常调用了
-	//   src 下多项目多文件使用
-	//   refer 异常处理
-	fmt.Println(request.PostFormValue("test"))
+func StringLog(response http.ResponseWriter, request *http.Request) {
+
+	a := "字符串拼接"
+	io.WriteString(response, "输出到客户端"+a)         //输出客户端
+	io.WriteString(response, request.RequestURI) //当前url
+
+	//日志形式打印到终端
+	log.Fatal("success")
+
+	log.Print("success")
+	os.Exit(1) //退出当前执行程序
+
 }
 
-func upload(response http.ResponseWriter, request *http.Request) {
-	message := ""
+/**
+ * 上传文件并判断是否存在
+ * @param {[type]} response http.ResponseWriter [description]
+ * @param {[type]} request  *http.Request       [description]
+ */
+func Upload(response http.ResponseWriter, request *http.Request) {
 	if request.Method == "POST" {
 		request.ParseMultipartForm(32 << 20)
-		file, hand, err := request.FormFile("filename")
-		if err != nill {
+		point, fileinfo, err := request.FormFile("fil")
+		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		defer file.Close()
+		defer point.Close()
 
-		f, err := os.OpenFile("./"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
-		if err != nill {
+		filepath := "C:\\Users\\datu\\go\\src\\file"
+		infos, err := ioutil.ReadDir(filepath)
+		if err != nil {
 			fmt.Println(err)
 			return
 		}
+		isfile := func() bool {
+			for _, v := range infos {
+				if v.Name() == fileinfo.Filename {
+					return true
+				}
+			}
+			return false
+		}()
+		if isfile {
+			http.Error(response, "该文件已存在", http.StatusInternalServerError)
+			return
+		}
+		//f, err := os.OpenFile("./file/"+fileinfo.Filename, os.O_WRONLY|os.O_CREATE, 0666) //两种创建文件方法
+		f, err := os.Create("./file/" + fileinfo.Filename)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
 		defer f.Close()
-		io.Copy(f, file)
-		message := "upload-success"
+		io.Copy(f, point)
 	}
 }
-*/
