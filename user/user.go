@@ -1,11 +1,13 @@
 package user
 
 import (
+	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"html/template"
 	"io"
 	"io/ioutil"
-	_ "log"
+	"log"
 	"net/http"
 	"os"
 	_ "reflect"
@@ -14,6 +16,15 @@ import (
 
 type Data struct {
 	Errorinfo string
+}
+
+type Gypic struct {
+	ToUserName   string
+	FromUserName string
+	CreateTime   int
+	MsgType      string
+	Content      string
+	MsgId        int
 }
 
 /**
@@ -127,5 +138,48 @@ func Upload(response http.ResponseWriter, request *http.Request) {
 
 		defer f.Close()
 		io.Copy(f, point)
+	}
+}
+
+/**
+ * 输出json
+ * @param {[type]} response http.ResponseWriter [description]
+ * @param {[type]} request  *http.Request       [description]
+ */
+func JsonEco(response http.ResponseWriter, request *http.Request) {
+	var countryCapitalMap = make(map[string]string)
+	countryCapitalMap["code"] = "2"
+	countryCapitalMap["msg"] = "qa"
+	fmt.Println(countryCapitalMap)
+
+	a, _ := json.Marshal(countryCapitalMap)
+
+	io.WriteString(response, string(a))
+}
+
+/**
+ * xml操作
+ */
+func XmlAct(response http.ResponseWriter, request *http.Request) {
+	wexml := `<xml><ToUserName>wxd678efh567hg6787</ToUserName><FromUserName>oUpF8uMuAJO_M2pxb1Q9zNjWeS6o</FromUserName><CreateTime>1348831860</CreateTime><MsgType>text</MsgType><Content>hello world</Content><MsgId>1234567890123456</MsgId></xml>`
+	result := Gypic{}
+	xml.Unmarshal([]byte(wexml), &result)
+	if result.MsgType == "text" {
+		useradr := result.FromUserName
+		result.FromUserName = result.ToUserName
+		result.ToUserName = useradr
+		output, err := xml.MarshalIndent(result, "  ", "    ")
+		if err != nil {
+			fmt.Printf("error: %v\n", err)
+		}
+
+		// os.Stdout.Write(output)	//也可输出
+
+		fmt.Fprint(response, string(output)) //客户端
+		fmt.Println(string(output))
+	} else {
+		fmt.Fprint(response, "success") //客户端
+		fmt.Println("success")
+
 	}
 }

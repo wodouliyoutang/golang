@@ -20,6 +20,9 @@ func main() {
 	http.HandleFunc("/index", user.Index)
 	http.HandleFunc("/string-log", user.StringLog)
 	http.HandleFunc("/upload", user.Upload)
+	http.HandleFunc("/json", user.JsonEco)
+	http.HandleFunc("/xml", user.XmlAct)
+
 	err := http.ListenAndServe(":80", nil)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -27,6 +30,6 @@ func main() {
 	}
 
 	// fmt.Println("Println")         //服务端
-	// fmt.Fprint(rw, "hello worlds") //客服端
+	// fmt.Fprint(rw, "hello worlds") //客户端
 
 }
