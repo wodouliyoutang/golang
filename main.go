@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"user"
+	"wx"
 )
 
 /**
@@ -22,8 +23,9 @@ func main() {
 	http.HandleFunc("/upload", user.Upload)
 	http.HandleFunc("/json", user.JsonEco)
 	http.HandleFunc("/xml", user.XmlAct)
+	http.HandleFunc("/wxsign", wx.Wxsign)
 
-	err := http.ListenAndServe(":80", nil)
+	err := http.ListenAndServe("127.0.0.1:8080", nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
