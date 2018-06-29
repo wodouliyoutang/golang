@@ -7,15 +7,16 @@ import (
 )
 
 var (
-	dbhostsip  = "127.0.0.1:3306" //IP地址
-	dbusername = "root"           //用户名
-	dbpassword = "root"           //密码
-	dbname     = "laravel"        //库名
-	charset    = "utf8"           //字符集
+	dbhostsip  = "127.0.0.1" //IP地址
+	port       = "3306"      //端口
+	dbusername = "root"      //用户名
+	dbpassword = "root"      //密码
+	dbname     = "laravel"   //库名
+	charset    = "utf8"      //字符集
 )
 
 func main() {
-	db, err := sql.Open("mysql", dbusername+":"+dbpassword+"@tcp("+dbhostsip+")/"+dbname+"?charset="+charset)
+	db, err := sql.Open("mysql", dbusername+":"+dbpassword+"@tcp("+dbhostsip+":"+port+")/"+dbname+"?charset="+charset)
 	checkErr(err)
 
 	// //插入数据
@@ -45,18 +46,18 @@ func main() {
 	rows, err := db.Query("SELECT * FROM p2p_access")
 	checkErr(err)
 
-	for rows.Next() {
-		var uid int
-		var username string
-		var department string
-		var created string
-		err = rows.Scan(&uid, &username, &department, &created)
-		checkErr(err)
-		fmt.Println(uid)
-		fmt.Println(username)
-		fmt.Println(department)
-		fmt.Println(created)
-	}
+	// for rows.Next() {
+	// 	var uid int
+	// 	var username string
+	// 	var department string
+	// 	var created string
+	// 	err = rows.Scan(&uid, &username, &department, &created)
+	// 	checkErr(err)
+	// 	fmt.Println(uid)
+	// 	fmt.Println(username)
+	// 	fmt.Println(department)
+	// 	fmt.Println(created)
+	// }
 
 	// //删除数据
 	// stmt, err = db.Prepare("delete from p2p_access where uid=?")
