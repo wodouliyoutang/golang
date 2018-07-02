@@ -4,7 +4,15 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"log"
 )
+
+type Tablev struct {
+	id     int
+	title  string
+	route  string
+	status int
+}
 
 var (
 	dbhostsip  = "127.0.0.1" //IP地址
@@ -15,68 +23,95 @@ var (
 	charset    = "utf8"      //字符集
 )
 
+var Db *sql.DB
+
 func main() {
-	db, err := sql.Open("mysql", dbusername+":"+dbpassword+"@tcp("+dbhostsip+":"+port+")/"+dbname+"?charset="+charset)
-	checkErr(err)
+	var err error
+	Db, err = sql.Open("mysql", dbusername+":"+dbpassword+"@tcp("+dbhostsip+":"+port+")/"+dbname+"?charset="+charset)
+	if err != nil {
+		log.Fatal(err)
+	}
+	/*
+		crea := Tablev{
+			title:  "biaoti",
+			route:  "luou",
+			status: 2,
+		}
+		crea.Create()
 
-	// //插入数据
-	// stmt, err := db.Prepare("INSERT userinfo SET username=?,departname=?,created=?")
-	// checkErr(err)
 
-	// res, err := stmt.Exec("码农", "研发部门", "2016-03-06")
-	// checkErr(err)
+		del := Tablev{
+			id: 4,
+		}
+		del.Delete()
 
-	// id, err := res.LastInsertId()
-	// checkErr(err)
 
-	// fmt.Println(id)
-	// //更新数据
-	// stmt, err = db.Prepare("update userinfo set username=? where uid=?")
-	// checkErr(err)
-
-	// res, err = stmt.Exec("码农二代", id)
-	// checkErr(err)
-
-	// affect, err := res.RowsAffected()
-	// checkErr(err)
-
-	// fmt.Println(affect)
-
-	//查询数据
-	rows, err := db.Query("SELECT * FROM p2p_access")
-	checkErr(err)
-
-	// for rows.Next() {
-	// 	var uid int
-	// 	var username string
-	// 	var department string
-	// 	var created string
-	// 	err = rows.Scan(&uid, &username, &department, &created)
-	// 	checkErr(err)
-	// 	fmt.Println(uid)
-	// 	fmt.Println(username)
-	// 	fmt.Println(department)
-	// 	fmt.Println(created)
-	// }
-
-	// //删除数据
-	// stmt, err = db.Prepare("delete from p2p_access where uid=?")
-	// checkErr(err)
-
-	// res, err = stmt.Exec(id)
-	// checkErr(err)
-
-	// affect, err = res.RowsAffected()
-	// checkErr(err)
-
-	// fmt.Println(affect)
-
-	db.Close()
+		sel := Tablev{
+			status: 2,
+		}
+		sel.Select()
+	*/
+	a, b := RetrievePost(2)
+	fmt.Println(a)
+	fmt.Println(b)
+	defer Db.Close()
 
 }
 
-func checkErr(err error) {
+func (data Tablev) Create() {
+	info, err := Db.Exec("INSERT INTO p2p_access (title,route,status) VALUES (?,?,?)", data.title, data.route, data.status)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
+	id, err := info.LastInsertId()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Println(id)
+	return
+
+}
+
+func (data Tablev) Delete() {
+	info, err := Db.Exec("DELETE FROM p2p_access WHERE ID = ?", data.id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	id, err := info.LastInsertId()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Println(id)
+	return
+}
+
+/**
+ * 查
+ * @param  {[type]} data Tablev)       Select( [description]
+ * @return {[type]}      [description]
+ */
+func (data Tablev) Select() {
+	info, err := Db.Query("SELECT * FROM p2p_access")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for info.Next() {
+		err := info.Scan(&data.id, &data.title, &data.route, &data.status)
+		fmt.Println(err)
+		fmt.Println(data.id)
+		fmt.Println(data.title)
+		fmt.Println(data.route)
+		fmt.Println(data.status)
+	}
+}
+
+/**
+ * 查
+ * @param {[type]} id int) (post Tablev, err error [description]
+ */
+func RetrievePost(id int) (post Tablev, err error) {
+	post = Tablev{}
+	err = Db.QueryRow("SELECT id, title, route FROM p2p_access WHERE id=?", id).Scan(
+		&post.id, &post.title, &post.route)
+	return
 }

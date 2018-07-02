@@ -20,6 +20,10 @@ func main() {
 	values, err := readValues(*filea)
 	if err == nil {
 		fmt.Println("文件内容:", values)
+		err := writeValues(values, "d.ini")
+		if err != nil {
+			panic(err)
+		}
 	} else {
 		fmt.Println(err)
 	}
@@ -56,7 +60,6 @@ func readValues(infile string) (values []string, err error) {
 			return
 		}
 		str := string(line) // 转换字符数组为字符串
-		// value, err1 := strconv.Atoi(str)
 		if err1 != nil {
 			err = err1
 			return
@@ -66,7 +69,12 @@ func readValues(infile string) (values []string, err error) {
 	return
 }
 
-func writeValues(values []int, outfile string) error {
+/**
+ * 新建文件并存入内容
+ * @param values 文件内容
+ * @param outfile 文件名称
+ */
+func writeValues(values []string, outfile string) error {
 	file, err := os.Create(outfile)
 	if err != nil {
 		fmt.Println("Failed to create the output file ", outfile)
@@ -74,8 +82,8 @@ func writeValues(values []int, outfile string) error {
 	}
 	defer file.Close()
 	for _, value := range values {
-		str := strconv.Itoa(value)
-		file.WriteString(str + "\n")
+
+		file.WriteString(value + "\n")
 	}
 	return nil
 }

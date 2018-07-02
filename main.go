@@ -24,6 +24,7 @@ func main() {
 	http.HandleFunc("/json", user.JsonEco)
 	http.HandleFunc("/xml", user.XmlAct)
 	http.HandleFunc("/wxsign", wx.Wxsign)
+	http.HandleFunc("/database", sqlact.Cre)
 
 	err := http.ListenAndServe("127.0.0.1:8080", nil)
 	if err != nil {
